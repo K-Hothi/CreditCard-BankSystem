@@ -32,6 +32,15 @@ public:
         delete[] arr;
     }
 
+    bool search(T data){
+        for(int i = 0; i < length; i++){
+            if(arr[i] = data){
+                return true;
+            }
+        }
+        return false;
+    }
+
     void insert(T data) {
         if (length == capacity) {
             resize(2 * capacity);
