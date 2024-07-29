@@ -52,3 +52,34 @@ void Account::creditCardDetails(){
     cout << "Limit: " << creditLimit << endl;
 
 }
+
+//Description: Pays credit card amount with savings account balance.
+//Output: Returns the amount still owing on the creditcard
+//Big O of (1)
+int Account::payCreditCard(int amout){
+    if(savingBalance > creditcardOwing){
+        savingBalance -= creditcardOwing;
+        creditcardOwing = 0;
+        return 0;
+    }
+    else if(savingBalance < creditcardOwing){
+        creditcardOwing - savingBalance;
+        savingBalance = 0;
+        return creditcardOwing;
+    }
+
+}
+
+//Description: Checks if account can be erased by checking if there is an ammount still owing
+//Output: Returns true if account is valid to close (no debt) else returns false
+//Big O of (1)
+bool Account::removeAccount(){
+    if(creditcardOwing > 0){
+        return false;
+    }
+    else{
+        savingBalance = 0;
+        return true;
+    }
+
+}

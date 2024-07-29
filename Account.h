@@ -25,6 +25,7 @@ class Account{
 
         void creditCardDetails();
 
+        int payCreditCard(int amout);
         
 
 };
