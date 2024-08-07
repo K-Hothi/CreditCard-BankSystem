@@ -1,85 +1,83 @@
 #include <iostream>
-#include<ctime>
-#include <sstream>
+#include <ctime>
 #include "Account.h"
 
 using namespace std;
 
 Account::Account(){
-    fullName = "John Doe";
-    accountNumber = 12345;
-
-    // Get current time
-    time_t now = time(0);
-    tm *ltm = localtime(&now);
-    // Format time as a string (YYYY-MM-DD HH:MM:SS)
-    stringstream ss;
-    ss << 1900 + ltm->tm_year << "-"
-       << 1 + ltm->tm_mon << "-"
-       << ltm->tm_mday << " "
-       << 1 + ltm->tm_hour << ":"
-       << 1 + ltm->tm_min << ":"
-       << 1 + ltm->tm_sec;
-
-    creationDate = ss.str();
-
-    string creditcardNumber = "123 456 7890";
-    savingBalance = 0;
-    creditcardOwing = 0;
+    name = "John Doe";
+    accountNumber = CreateAccountNumber();
+    savingsBalance = 0;
     creditLimit = 1000;
-
+    creditOwing = 0;
 }
 
-int Account::withdraw(int amount){
-    savingBalance -= amount;
-    return savingBalance;
+Account::Account(string name){
+    this->name = name;
+    accountNumber = CreateAccountNumber();
+    savingsBalance = 0;
+    creditLimit = 1000;
+    creditOwing = 0;
 }
 
-unsigned int Account::createAccountNumber(){
-        
-    srand(time(0));
-    int randomNumber = 10000000 + rand() % 90000000;
-    return randomNumber;
+Account::Account(string name, long savingsBalance, long creditLimit){
+    this->name = name;
+    accountNumber = CreateAccountNumber();
+    this->savingsBalance = savingsBalance;
+    this->creditLimit = creditLimit;
+    creditOwing = 0;
 }
 
-unsigned int Account::deposit(unsigned int amount){
-    savingBalance += amount;
+void Account ::accountDetails(){
+    cout << name << "'s Account" << endl;
+    cout << "Account Number: " << accountNumber << endl;
+    cout << "Savings Balance: " << savingsBalance << endl;
+    PrintCreditDetails();
 }
 
-void Account::creditCardDetails(){
-    cout << "Number: " << creditcardNumber << endl;
-    cout << "Owing: " << creditcardOwing << endl;
-    cout << "Limit: " << creditLimit << endl;
+long Account::CreateAccountNumber(){
+    srand(std::time(0));
+    long long accountNumber = (long)((std::rand()) * std::rand());
+    accountNumber = accountNumber % 9000000000 + 10000000;
 
-}
-
-//Description: Pays credit card amount with savings account balance.
-//Output: Returns the amount still owing on the creditcard
-//Big O of (1)
-int Account::payCreditCard(int amout){
-    if(savingBalance > creditcardOwing){
-        savingBalance -= creditcardOwing;
-        creditcardOwing = 0;
-        return 0;
-    }
-    else if(savingBalance < creditcardOwing){
-        creditcardOwing - savingBalance;
-        savingBalance = 0;
-        return creditcardOwing;
+    if(accountNumber < 0){
+        accountNumber *= -1;
     }
 
+    return accountNumber;
 }
 
-//Description: Checks if account can be erased by checking if there is an ammount still owing
-//Output: Returns true if account is valid to close (no debt) else returns false
-//Big O of (1)
-bool Account::removeAccount(){
-    if(creditcardOwing > 0){
-        return false;
-    }
-    else{
-        savingBalance = 0;
-        return true;
-    }
+long Account::DepositSavings(int amount){
+    savingsBalance += amount;
+    return savingsBalance;
+}
 
+long Account::WithdrawSavings(int amount){
+    if(amount > savingsBalance){
+        return -1;
+    }
+    savingsBalance -= amount;
+    return savingsBalance;
+}
+
+void Account::PrintCreditDetails(){
+    cout << "Credit Limit: " << creditLimit << endl;
+    cout << "Amount Owing: " << creditOwing << endl;
+}
+
+int Account::WithdrawCredit(int amount){
+    if(creditLimit - creditOwing <= amount){
+        return -1;
+    }
+    creditOwing += amount;
+    return creditLimit - creditOwing;
+}
+
+int Account::PayCreditOwing(int amount){
+    int outputCode = WithdrawSavings(amount);
+    if(outputCode > -1){
+        savingsBalance -= amount;
+        creditOwing -= amount;
+    }
+    return creditOwing;
 }

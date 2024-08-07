@@ -1,32 +1,29 @@
-#ifndef ACCOUNT_H
-#define ACCOUNT_H
+#ifndef ACCOUNT
+#define ACCOUNT
 
 #include <iostream>
 using namespace std;
 
 class Account{
     private:
-        unsigned int accountNumber;
-        string fullName;
-        string creationDate;
-        string creditcardNumber;
-        unsigned int savingBalance;
-        int creditcardOwing;
+        string name;
+        long accountNumber;
+        long savingsBalance;
         int creditLimit;
+        int creditOwing;
 
     public:
-        int Account::withdraw(int amount);
+        Account();
+        Account(string name);
+        Account(string name, long savingsBalance, long creditLimit);
 
-        unsigned int createAccountNumber();
-
-        unsigned int deposit(unsigned int amount);
-
-        bool removeAccount();
-
-        void creditCardDetails();
-
-        int payCreditCard(int amout);
-        
+        void accountDetails();
+        long CreateAccountNumber();
+        long DepositSavings(int amount);
+        long WithdrawSavings(int amount);
+        void PrintCreditDetails();
+        int PayCreditOwing(int amount);
+        int WithdrawCredit(int amount);
 
 };
 
