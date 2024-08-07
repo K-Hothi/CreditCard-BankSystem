@@ -81,3 +81,7 @@ int Account::PayCreditOwing(int amount){
     }
     return creditOwing;
 }
+
+long Account::GetAccountNumber(){
+    return accountNumber;
+}

@@ -24,6 +24,7 @@ class Account{
         void PrintCreditDetails();
         int PayCreditOwing(int amount);
         int WithdrawCredit(int amount);
+        long GetAccountNumber();
 
 };
 
