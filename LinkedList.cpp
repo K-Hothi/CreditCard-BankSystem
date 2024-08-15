@@ -10,17 +10,22 @@ LinkedList::LinkedList(){
 }
 void LinkedList::addNode(Account* account){
     Node* temp = head;
+    Node* newNode = new Node(account);
     if(temp == nullptr){
-        head = new Node(account);
+        head = newNode;
+        tail = newNode;
         length++;
         return;
     }
-    while(temp->next != nullptr){
-        temp = temp->next;
-    }
-    temp->next = new Node(account);
+
+    tail->next = newNode;
+    newNode->prev = tail;
+    tail = newNode;
+
     length++;
+
     return;
+    
 }
 Account* LinkedList::searchAccount(long accountNumber){
     Node* temp = head;
@@ -28,9 +33,10 @@ Account* LinkedList::searchAccount(long accountNumber){
         return nullptr;
     }
     while(temp != nullptr){
-        if(temp->account->GetAccountNumber()){
+        if(temp->account->GetAccountNumber() == accountNumber){
             return temp->account;
         }
+        temp = temp->next;
     }
     return nullptr;
 
@@ -45,20 +51,25 @@ Account* LinkedList::removeNode(long accountNumber){
             length--;
             delete current;
             current = nullptr;
-            return;
+            return current->account;
         }
     }
-    Node* next = head->next;
+    
 
     while(current != nullptr){
-        if(next->account->GetAccountNumber() == accountNumber){
-            current->next = next->next;
+        if(current->account->GetAccountNumber() == accountNumber){
+            if(current->account == tail->account){
+                Node* toRemove = tail;
+                tail = tail->prev;
+                return toRemove->account;
+            }
+            current->prev = current->next;
+            current->next->prev = current->prev;
             length--;
-            return;
+            return current->account;
         }
         current = current->next;
-        next = current->next;
     }
 
-    return;
+    return nullptr;
 }
